@@ -52,7 +52,7 @@ class SignInFragment : Fragment() {
         viewModel.liveData.observe(viewLifecycleOwner) { state ->
             state?.let {
                 if (it.toMainScreenBtn) {
-                    toNextScreen(MainFragment(), "MainFragment")
+                    toNextScreen(HomeFragment(), "MainFragment")
                 }
                 if (it.toRegisterScreenBtn) {
                     toNextScreen(RegistrationFragment(), "RegistrationFragment")
@@ -62,9 +62,9 @@ class SignInFragment : Fragment() {
     }
 
     private fun toNextScreen(fragment : Fragment, fragmentTag : String){
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainerView, fragment, fragmentTag)
-            .commit()
+//        parentFragmentManager.beginTransaction()
+//            .replace(R.id.fragmentContainerView, fragment, fragmentTag)
+//            .commit()
     }
 
     private fun initClickListeners(userPrefs : UserPreferences, dao : UserDao){

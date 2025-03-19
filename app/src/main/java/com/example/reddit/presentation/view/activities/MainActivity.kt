@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         if(savedInstanceState == null){
             supportFragmentManager
                 .beginTransaction()
-                .add(R.id.fragmentContainerView, SplashFragment(), "SplashFragment")
+                .add(R.id.nav_host_fragment_container, SplashFragment(), "SplashFragment")
                 .commit()
         }
     }

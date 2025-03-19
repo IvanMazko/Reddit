@@ -11,39 +11,39 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reddit.R
-import com.example.reddit.data.models.User
 import com.example.reddit.data.storage.UserPreferences
 import com.example.reddit.data.storage.room.DatabaseProvider
-import com.example.reddit.data.storage.room.PostDao
-import com.example.reddit.databinding.FragmentMainBinding
+import com.example.reddit.databinding.FragmentHomeBinding
 import com.example.reddit.domain.model.Post
-import com.example.reddit.presentation.actions.MainFragmentActions
+import com.example.reddit.presentation.actions.HomeFragmentActions
 import com.example.reddit.presentation.view.Adapter
-import com.example.reddit.presentation.view_models.MainFragmentViewModel
+import com.example.reddit.presentation.view_models.HomeFragmentViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainFragment : Fragment() {
+class HomeFragment : Fragment() {
 
-    private val viewModel: MainFragmentViewModel by viewModels()
+    private val viewModel: HomeFragmentViewModel by viewModels()
     private var listOfPosts: ArrayList<Post> = ArrayList()
     private var adapter: Adapter? = null
 
-    private var _binding: FragmentMainBinding?= null
-    private val binding: FragmentMainBinding get() = _binding!!
+    private var _binding: FragmentHomeBinding?= null
+    private val binding: FragmentHomeBinding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMainBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
 
         // connecting of DB and Prefs
         val userPrefs = UserPreferences(requireContext())
@@ -74,7 +74,7 @@ class MainFragment : Fragment() {
             lifecycleScope.launch(Dispatchers.IO) {
                 val updatedListOfPosts = dao.getPostsByUserId(currentUser.id)
                 withContext(Dispatchers.Main) { // Переключаемся на главный поток перед обновлением LiveData
-                    viewModel.handleAction(MainFragmentActions.SetListOfPosts(updatedListOfPosts))
+                    viewModel.handleAction(HomeFragmentActions.SetListOfPosts(updatedListOfPosts))
                 }
             }
         }
@@ -86,7 +86,7 @@ class MainFragment : Fragment() {
         viewModel.liveData.observe(viewLifecycleOwner) { state ->
             state?.let {
                 if (it.checkSavedPostsBtn) {
-                    //toNextScreen(SavedPostsFragment(), "NewNoteFragment")
+                    toNextScreen(FavoritesFragment(), "NewNoteFragment")
                 }
                 if (it.signOutBtn) {
                     userPrefs.deleteUser()
@@ -101,9 +101,9 @@ class MainFragment : Fragment() {
     }
 
     private fun toNextScreen(fragment : Fragment, fragmentTag : String){
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainerView, fragment, fragmentTag)
-            .commit()
+//        parentFragmentManager.beginTransaction()
+//            .replace(R.id.fragmentContainerView, fragment, fragmentTag)
+//            .commit()
     }
 
     private fun updateListOfPosts(noteList: List<Post>?) {
@@ -129,12 +129,12 @@ class MainFragment : Fragment() {
         popupMenu.setOnMenuItemClickListener { menuItem: MenuItem ->
             when (menuItem.itemId) {
                 R.id.menu_saved -> {
-                    viewModel.handleAction(MainFragmentActions.CheckSavedPosts)
+                    viewModel.handleAction(HomeFragmentActions.CheckSavedPosts)
                     true
                 }
 
                 R.id.menu_sign_out -> {
-                    viewModel.handleAction(MainFragmentActions.ReturnToRegistration)
+                    viewModel.handleAction(HomeFragmentActions.ReturnToRegistration)
                     true
                 }
 

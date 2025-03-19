@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.reddit.R
 import com.example.reddit.data.storage.UserPreferences
 import com.example.reddit.databinding.FragmentSplashBinding
@@ -33,24 +34,24 @@ class SplashFragment : Fragment() {
 
         lifecycleScope.launch {
             delay(3000)
-            if (checkUser(userPrefs)){
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainerView, MainFragment(),"MainFragment")
-                    .commit()
+            if (checkUser(userPrefs)) {
+//                parentFragmentManager.beginTransaction()
+//                    .replace(R.id.fragmentContainerView, HomeFragment(), "MainFragment")
+//                    .commit()
+                findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+            } else {
+//                parentFragmentManager.beginTransaction()
+//                    .replace(R.id.fragmentContainerView, SignInFragment(), "SignInFragment")
+//                    .commit()
+                findNavController().navigate(R.id.action_splashFragment_to_signInFragment)
             }
-            else {
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainerView, SignInFragment(),"SignInFragment")
-                    .commit()
-            }
-
         }
+
     }
 
     private fun checkUser(userPrefs: UserPreferences): Boolean {
         return userPrefs.isUserExists()
     }
-
     override fun onDestroy() {
         _binding = null
         super.onDestroy()

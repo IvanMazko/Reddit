@@ -10,6 +10,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.reddit.R
 import com.example.reddit.data.storage.UserPreferences
 import com.example.reddit.databinding.FragmentSplashBinding
+import com.example.reddit.presentation.view.activities.MainActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -29,6 +31,8 @@ class SplashFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        (requireActivity() as MainActivity).binding.bottomNavigation.visibility = View.INVISIBLE
 
 //        view.layoutParams = ViewGroup.LayoutParams(
 //            ViewGroup.LayoutParams.MATCH_PARENT,

@@ -18,6 +18,7 @@ import com.example.reddit.databinding.FragmentHomeBinding
 import com.example.reddit.domain.model.Post
 import com.example.reddit.presentation.actions.HomeFragmentActions
 import com.example.reddit.presentation.view.Adapter
+import com.example.reddit.presentation.view.activities.MainActivity
 import com.example.reddit.presentation.view_models.HomeFragmentViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.Dispatchers
@@ -46,6 +47,8 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
+        // Делаем BottomNavigationView видимым
+        (requireActivity() as MainActivity).binding.bottomNavigation.visibility = View.VISIBLE
 
         // connecting of DB and Prefs
         val userPrefs = UserPreferences(requireContext())
@@ -147,4 +150,9 @@ class HomeFragment : Fragment() {
 //        }
 //        popupMenu.show()
 //    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
+    }
 }

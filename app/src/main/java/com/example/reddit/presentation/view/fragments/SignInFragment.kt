@@ -16,7 +16,9 @@ import com.example.reddit.data.storage.room.DatabaseProvider
 import com.example.reddit.data.storage.room.UserDao
 import com.example.reddit.databinding.FragmentSignInBinding
 import com.example.reddit.presentation.actions.SignInFragmentActions
+import com.example.reddit.presentation.view.activities.MainActivity
 import com.example.reddit.presentation.view_models.SignInFragmentViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -25,8 +27,8 @@ class SignInFragment : Fragment() {
 
     private val viewModel: SignInFragmentViewModel by viewModels()
 
-    var _binding : FragmentSignInBinding ?= null
-    val binding : FragmentSignInBinding get() = _binding!!
+    private var _binding : FragmentSignInBinding ?= null
+    private val binding : FragmentSignInBinding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,6 +41,8 @@ class SignInFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        (requireActivity() as MainActivity).binding.bottomNavigation.visibility = View.INVISIBLE
 
         val database = DatabaseProvider.getDatabase(requireContext())
         val dao = database.userDao()

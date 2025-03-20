@@ -30,6 +30,10 @@ class SplashFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+//        view.layoutParams = ViewGroup.LayoutParams(
+//            ViewGroup.LayoutParams.MATCH_PARENT,
+//            ViewGroup.LayoutParams.MATCH_PARENT)
+
         val userPrefs = UserPreferences(requireContext())
 
         lifecycleScope.launch {

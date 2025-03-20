@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.reddit.R
 import com.example.reddit.data.models.User
 import com.example.reddit.data.storage.UserPreferences
@@ -52,16 +53,23 @@ class SignInFragment : Fragment() {
         viewModel.liveData.observe(viewLifecycleOwner) { state ->
             state?.let {
                 if (it.toMainScreenBtn) {
-                    toNextScreen(HomeFragment(), "MainFragment")
+                    findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
+//                    toNextScreen(HomeFragment())  //, "MainFragment"
                 }
                 if (it.toRegisterScreenBtn) {
-                    toNextScreen(RegistrationFragment(), "RegistrationFragment")
+                    toNextScreen(RegistrationFragment()) //, "RegistrationFragment"
                 }
             }
         }
     }
 
-    private fun toNextScreen(fragment : Fragment, fragmentTag : String){
+    private fun toNextScreen(fragment : Fragment){
+        if (fragment == HomeFragment()){
+           // findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
+        }
+        else{
+            findNavController().navigate(R.id.action_signInFragment_to_registrationFragment)
+        }
 //        parentFragmentManager.beginTransaction()
 //            .replace(R.id.fragmentContainerView, fragment, fragmentTag)
 //            .commit()

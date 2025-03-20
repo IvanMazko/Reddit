@@ -9,6 +9,7 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reddit.R
 import com.example.reddit.data.storage.UserPreferences
@@ -18,6 +19,7 @@ import com.example.reddit.domain.model.Post
 import com.example.reddit.presentation.actions.HomeFragmentActions
 import com.example.reddit.presentation.view.Adapter
 import com.example.reddit.presentation.view_models.HomeFragmentViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -86,11 +88,13 @@ class HomeFragment : Fragment() {
         viewModel.liveData.observe(viewLifecycleOwner) { state ->
             state?.let {
                 if (it.checkSavedPostsBtn) {
-                    toNextScreen(FavoritesFragment(), "NewNoteFragment")
+                    //findNavController().navigate(R.id.action_homeFragment_to_favoritesFragment)
+//                    toNextScreen(FavoritesFragment(), "NewNoteFragment")
                 }
                 if (it.signOutBtn) {
                     userPrefs.deleteUser()
-                    toNextScreen(SignInFragment(), "SignInFragment")
+                    findNavController().navigate(R.id.action_homeFragment_to_signInFragment)
+//                    toNextScreen(SignInFragment(), "SignInFragment")
                 }
                 if (it.readFullPostBtn){
                     //toNextScreen(ExactPostFragment(), "ExactPostFragment")
@@ -100,11 +104,11 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun toNextScreen(fragment : Fragment, fragmentTag : String){
-//        parentFragmentManager.beginTransaction()
-//            .replace(R.id.fragmentContainerView, fragment, fragmentTag)
-//            .commit()
-    }
+//    private fun toNextScreen(fragment : Fragment, fragmentTag : String){
+////        parentFragmentManager.beginTransaction()
+////            .replace(R.id.fragmentContainerView, fragment, fragmentTag)
+////            .commit()
+//    }
 
     private fun updateListOfPosts(noteList: List<Post>?) {
         if (noteList != null) {
@@ -115,32 +119,32 @@ class HomeFragment : Fragment() {
     }
 
     private fun initClickListeners() {
-        _binding?.fmMenuBtn?.setOnClickListener {
-            view?.let { it1 -> showPopupMenu(it1) }
-        }
-//        _binding?.amSignOutBtn?.setOnClickListener {
-//            viewModel.handleAction(MainFragmentAction.ReturnToRegistration)
+//        _binding?.fmMenuBtn?.setOnClickListener {
+//            view?.let { it1 -> showPopupMenu(it1) }
 //        }
-    }
-
-    private fun showPopupMenu(view: View) {   //, position: Int, dao: PostDao, currentUser : User?
-        val popupMenu = PopupMenu(view.context, view)
-        popupMenu.menuInflater.inflate(R.menu.three_points_btn_menu, popupMenu.menu)
-        popupMenu.setOnMenuItemClickListener { menuItem: MenuItem ->
-            when (menuItem.itemId) {
-                R.id.menu_saved -> {
-                    viewModel.handleAction(HomeFragmentActions.CheckSavedPosts)
-                    true
-                }
-
-                R.id.menu_sign_out -> {
-                    viewModel.handleAction(HomeFragmentActions.ReturnToRegistration)
-                    true
-                }
-
-                else -> false
-            }
+        _binding?.fmSignOutBtn?.setOnClickListener {
+            viewModel.handleAction(HomeFragmentActions.ReturnToRegistration)
         }
-        popupMenu.show()
     }
+
+//    private fun showPopupMenu(view: View) {   //, position: Int, dao: PostDao, currentUser : User?
+//        val popupMenu = PopupMenu(view.context, view)
+//        popupMenu.menuInflater.inflate(R.menu.three_points_btn_menu, popupMenu.menu)
+//        popupMenu.setOnMenuItemClickListener { menuItem: MenuItem ->
+//            when (menuItem.itemId) {
+//                R.id.menu_saved -> {
+//                    viewModel.handleAction(HomeFragmentActions.CheckSavedPosts)
+//                    true
+//                }
+//
+//                R.id.menu_sign_out -> {
+//                    viewModel.handleAction(HomeFragmentActions.ReturnToRegistration)
+//                    true
+//                }
+//
+//                else -> false
+//            }
+//        }
+//        popupMenu.show()
+//    }
 }

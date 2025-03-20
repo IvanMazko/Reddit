@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.reddit.R
 import com.example.reddit.data.models.User
 import com.example.reddit.data.storage.UserPreferences
@@ -15,7 +16,9 @@ import com.example.reddit.data.storage.room.DatabaseProvider
 import com.example.reddit.data.storage.room.UserDao
 import com.example.reddit.databinding.FragmentSignInBinding
 import com.example.reddit.presentation.actions.SignInFragmentActions
+import com.example.reddit.presentation.view.activities.MainActivity
 import com.example.reddit.presentation.view_models.SignInFragmentViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -24,8 +27,8 @@ class SignInFragment : Fragment() {
 
     private val viewModel: SignInFragmentViewModel by viewModels()
 
-    var _binding : FragmentSignInBinding ?= null
-    val binding : FragmentSignInBinding get() = _binding!!
+    private var _binding : FragmentSignInBinding ?= null
+    private val binding : FragmentSignInBinding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,6 +41,8 @@ class SignInFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        (requireActivity() as MainActivity).binding.bottomNavigation.visibility = View.INVISIBLE
 
         val database = DatabaseProvider.getDatabase(requireContext())
         val dao = database.userDao()
@@ -52,19 +57,26 @@ class SignInFragment : Fragment() {
         viewModel.liveData.observe(viewLifecycleOwner) { state ->
             state?.let {
                 if (it.toMainScreenBtn) {
-                    toNextScreen(MainFragment(), "MainFragment")
+                    findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
+//                    toNextScreen(HomeFragment())  //, "MainFragment"
                 }
                 if (it.toRegisterScreenBtn) {
-                    toNextScreen(RegistrationFragment(), "RegistrationFragment")
+                    toNextScreen(RegistrationFragment()) //, "RegistrationFragment"
                 }
             }
         }
     }
 
-    private fun toNextScreen(fragment : Fragment, fragmentTag : String){
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainerView, fragment, fragmentTag)
-            .commit()
+    private fun toNextScreen(fragment : Fragment){
+        if (fragment == HomeFragment()){
+           // findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
+        }
+        else{
+            findNavController().navigate(R.id.action_signInFragment_to_registrationFragment)
+        }
+//        parentFragmentManager.beginTransaction()
+//            .replace(R.id.fragmentContainerView, fragment, fragmentTag)
+//            .commit()
     }
 
     private fun initClickListeners(userPrefs : UserPreferences, dao : UserDao){

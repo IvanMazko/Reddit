@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.reddit.R
 import com.example.reddit.data.models.User
 import com.example.reddit.data.storage.UserPreferences
@@ -52,19 +53,25 @@ class RegistrationFragment : Fragment() {
         viewModel.liveData.observe(viewLifecycleOwner) { state ->
             state?.let {
                 if (it.toMainScreenBtn){
-                    toNextScreen(MainFragment(), "MainFragment")
+                    toNextScreen(HomeFragment()) //, "MainFragment"
                 }
                 if (it.toSignInScreenBtn){
-                    toNextScreen(SignInFragment(), "SignInFragment")
+                    toNextScreen(SignInFragment()) //, "SignInFragment"
                 }
             }
         }
     }
 
-    private fun toNextScreen(fragment : Fragment, fragmentTag : String){
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainerView, fragment, fragmentTag)
-            .commit()
+    private fun toNextScreen(fragment : Fragment){
+        if (fragment == HomeFragment()){
+
+        }
+        else{
+            findNavController().navigate(R.id.action_registrationFragment_to_signInFragment)
+        }
+//        parentFragmentManager.beginTransaction()
+//            .replace(R.id.fragmentContainerView, fragment, fragmentTag)
+//            .commit()
     }
 
 
@@ -82,7 +89,8 @@ class RegistrationFragment : Fragment() {
                         val user = getUserFromDb(_binding?.arUsernameEt?.text.toString(), dao)
                         if (user != null) {
                             userPrefs.saveUser(user)
-                            viewModel.handleAction(RegistrationFragmentActions.GoToMainScreen(_binding?.arUsernameEt?.text.toString()))
+                            findNavController().navigate(R.id.action_registrationFragment_to_homeFragment)
+//                            viewModel.handleAction(RegistrationFragmentActions.GoToMainScreen(_binding?.arUsernameEt?.text.toString()))
                         }
                     }
                     else {

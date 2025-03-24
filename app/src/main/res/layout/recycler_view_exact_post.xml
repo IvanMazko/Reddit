@@ -21,11 +21,20 @@
         tools:text="Author"/>
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/rvep_header_actv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rvep_author_actv"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Header"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/rvep_message_actv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/rvep_share_acb"
-        app:layout_constraintTop_toBottomOf="@id/rvep_author_actv"
+        app:layout_constraintTop_toBottomOf="@id/rvep_header_actv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="5dp"
@@ -58,10 +67,22 @@
         android:textSize="6dp"/>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/rvep_save_acb"
+        android:id="@+id/rvep_dislike_acb"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@+id/rvep_like_acb"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rvep_message_actv"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="Dislike"
+        android:textSize="6dp"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/rvep_save_acb"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/rvep_dislike_acb"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rvep_message_actv"
         android:layout_marginStart="20dp"

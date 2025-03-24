@@ -18,18 +18,19 @@ import com.example.reddit.databinding.FragmentHomeBinding
 import com.example.reddit.domain.model.Post
 import com.example.reddit.presentation.actions.HomeFragmentActions
 import com.example.reddit.presentation.view.Adapter
+import com.example.reddit.presentation.view.PostAdapter
 import com.example.reddit.presentation.view.activities.MainActivity
 import com.example.reddit.presentation.view_models.HomeFragmentViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
+import org.koin.androidx.viewmodel.ext.android.viewModel
 class HomeFragment : Fragment() {
 
-    private val viewModel: HomeFragmentViewModel by viewModels()
+    private val viewModel: HomeFragmentViewModel by viewModel()
     private var listOfPosts: ArrayList<Post> = ArrayList()
-    private var adapter: Adapter? = null
+    private var postAdapter: PostAdapter? = null
 
     private var _binding: FragmentHomeBinding?= null
     private val binding: FragmentHomeBinding get() = _binding!!
@@ -63,26 +64,34 @@ class HomeFragment : Fragment() {
 //        }
 
 
-        //usage of Adapter
-        val recyclerView = _binding?.fmPostsRv
-        adapter = Adapter(listOfPosts) { view, position: Int ->
-            //showPopupMenu(view, position, dao, currentUser)
+        postAdapter = PostAdapter()
+        binding.fmPostsRv.apply {
+            adapter = postAdapter
+            layoutManager = LinearLayoutManager(requireContext())
         }
-        recyclerView?.adapter = adapter
-        recyclerView?.layoutManager = LinearLayoutManager(requireContext())
+
+
+
+//        //usage of Adapter
+//        val recyclerView = _binding?.fmPostsRv
+//        adapter = Adapter(listOfPosts) { view, position: Int ->
+//            //showPopupMenu(view, position, dao, currentUser)
+//        }
+//        recyclerView?.adapter = adapter
+//        recyclerView?.layoutManager = LinearLayoutManager(requireContext())
 
 
         initClickListeners()
 
-        // setting of notesList
-        if (currentUser != null) {
-            lifecycleScope.launch(Dispatchers.IO) {
-                val updatedListOfPosts = dao.getPostsByUserId(currentUser.id)
-                withContext(Dispatchers.Main) { // Переключаемся на главный поток перед обновлением LiveData
-                    viewModel.handleAction(HomeFragmentActions.SetListOfPosts(updatedListOfPosts))
-                }
-            }
-        }
+//        // setting of notesList
+//        if (currentUser != null) {
+//            lifecycleScope.launch(Dispatchers.IO) {
+//                val updatedListOfPosts = dao.getPostsByUserId(currentUser.id)
+//                withContext(Dispatchers.Main) { // Переключаемся на главный поток перед обновлением LiveData
+//                    viewModel.handleAction(HomeFragmentActions.SetListOfPosts(updatedListOfPosts))
+//                }
+//            }
+//        }
 
         observeViewModel(userPrefs)
     }
@@ -91,7 +100,7 @@ class HomeFragment : Fragment() {
         viewModel.liveData.observe(viewLifecycleOwner) { state ->
             state?.let {
                 if (it.checkSavedPostsBtn) {
-                    //findNavController().navigate(R.id.action_homeFragment_to_favoritesFragment)
+                    findNavController().navigate(R.id.action_homeFragment_to_favoritesFragment)
 //                    toNextScreen(FavoritesFragment(), "NewNoteFragment")
                 }
                 if (it.signOutBtn) {
@@ -102,7 +111,11 @@ class HomeFragment : Fragment() {
                 if (it.readFullPostBtn){
                     //toNextScreen(ExactPostFragment(), "ExactPostFragment")
                 }
-                updateListOfPosts(it.listOfPosts)
+                //updateListOfPosts(it.listOfPosts)
+                // Обновляем адаптер, если данные изменились
+                it.listOfPosts.observe(viewLifecycleOwner) { pagingData ->
+                    postAdapter?.submitData(lifecycle, pagingData)
+                }
             }
         }
     }
@@ -113,13 +126,13 @@ class HomeFragment : Fragment() {
 ////            .commit()
 //    }
 
-    private fun updateListOfPosts(noteList: List<Post>?) {
-        if (noteList != null) {
-            listOfPosts.clear()
-            listOfPosts.addAll(noteList)
-            adapter?.notifyDataSetChanged()
-        }
-    }
+//    private fun updateListOfPosts(noteList: List<Post>?) {
+//        if (noteList != null) {
+//            listOfPosts.clear()
+//            listOfPosts.addAll(noteList)
+//            adapter?.notifyDataSetChanged()
+//        }
+//    }
 
     private fun initClickListeners() {
 //        _binding?.fmMenuBtn?.setOnClickListener {

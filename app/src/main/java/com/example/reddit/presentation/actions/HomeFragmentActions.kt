@@ -7,5 +7,5 @@ sealed class HomeFragmentActions {
     data object ReturnToRegistration: HomeFragmentActions()
     data object ReadFullPost: HomeFragmentActions()
     data object SavePost: HomeFragmentActions()
-    data class SetListOfPosts(val list: List<Post>) : HomeFragmentActions()
+    //data class SetListOfPosts(val list: List<Post>) : HomeFragmentActions()
 }

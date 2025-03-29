@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.reddit.R
@@ -25,10 +26,15 @@ import kotlinx.coroutines.withContext
 
 class SignInFragment : Fragment() {
 
-    private val viewModel: SignInFragmentViewModel by viewModels()
+    private var viewModel: SignInFragmentViewModel ?= null
 
     private var _binding : FragmentSignInBinding ?= null
     private val binding : FragmentSignInBinding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application).create(SignInFragmentViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,7 +60,7 @@ class SignInFragment : Fragment() {
     }
 
     private fun observeViewModel(){
-        viewModel.liveData.observe(viewLifecycleOwner) { state ->
+        viewModel?.liveData?.observe(viewLifecycleOwner) { state ->
             state?.let {
                 if (it.toMainScreenBtn) {
                     findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
@@ -88,7 +94,7 @@ class SignInFragment : Fragment() {
                     val user = getUserFromDb(_binding?.loginEt?.text.toString(), dao) // Получаем пользователя из БД
                     if (user != null && user.password == _binding?.passwordEt?.text.toString()){
                         userPrefs.saveUser(user) // Сохраняем пользователя в SharedPreferences
-                        viewModel.handleAction(SignInFragmentActions.GoToMainScreen)
+                        viewModel?.handleAction(SignInFragmentActions.GoToMainScreen)
                     }
                     else {
                         Toast.makeText(requireContext(), "Invalid login or password!", Toast.LENGTH_SHORT).show()
@@ -98,7 +104,7 @@ class SignInFragment : Fragment() {
         }
 
         _binding?.asiRegisterBtn?.setOnClickListener {
-            viewModel.handleAction(SignInFragmentActions.GoToRegistrationScreen)
+            viewModel?.handleAction(SignInFragmentActions.GoToRegistrationScreen)
         }
     }
 

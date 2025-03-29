@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.reddit.R
@@ -16,17 +17,25 @@ import com.example.reddit.data.storage.room.DatabaseProvider
 import com.example.reddit.data.storage.room.UserDao
 import com.example.reddit.databinding.FragmentRegistrationBinding
 import com.example.reddit.presentation.actions.RegistrationFragmentActions
+import com.example.reddit.presentation.view_models.HomeFragmentViewModel
 import com.example.reddit.presentation.view_models.RegistrationFragmentViewModel
+import com.example.reddit.presentation.view_models.SignInFragmentViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class RegistrationFragment : Fragment() {
 
-    private val viewModel : RegistrationFragmentViewModel by viewModels()
+    private var viewModel : RegistrationFragmentViewModel ?= null
 
     private var _binding : FragmentRegistrationBinding ?= null
     private val binding : FragmentRegistrationBinding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application).create(
+            RegistrationFragmentViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,7 +59,7 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun observeViewModel(){
-        viewModel.liveData.observe(viewLifecycleOwner) { state ->
+        viewModel?.liveData?.observe(viewLifecycleOwner) { state ->
             state?.let {
                 if (it.toMainScreenBtn){
                     toNextScreen(HomeFragment()) //, "MainFragment"
@@ -83,7 +92,7 @@ class RegistrationFragment : Fragment() {
                 lifecycleScope.launch {
                     if (dao.getUserByUsername(_binding?.arUsernameEt?.text.toString()) == null){
                         val job = launch(Dispatchers.IO) {
-                            viewModel.handleAction(RegistrationFragmentActions.RegisterUser(_binding?.arUsernameEt?.text.toString(),  _binding?.arPasswordEt?.text.toString(), dao))
+                            viewModel?.handleAction(RegistrationFragmentActions.RegisterUser(_binding?.arUsernameEt?.text.toString(),  _binding?.arPasswordEt?.text.toString(), dao))
                         }
                         job.join() // Дожидаемся завершения вставки
                         val user = getUserFromDb(_binding?.arUsernameEt?.text.toString(), dao)
@@ -102,7 +111,7 @@ class RegistrationFragment : Fragment() {
 
         }
         _binding?.arReturnBtn?.setOnClickListener {
-            viewModel.handleAction(RegistrationFragmentActions.GoToSignInScreen)
+            viewModel?.handleAction(RegistrationFragmentActions.GoToSignInScreen)
         }
     }
 

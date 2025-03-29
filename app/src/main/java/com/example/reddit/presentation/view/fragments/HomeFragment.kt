@@ -1,6 +1,8 @@
 package com.example.reddit.presentation.view.fragments
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -8,10 +10,14 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reddit.R
+import com.example.reddit.data.api.APIService
+import com.example.reddit.data.repository.PostsRepository
 import com.example.reddit.data.storage.UserPreferences
 import com.example.reddit.data.storage.room.DatabaseProvider
 import com.example.reddit.databinding.FragmentHomeBinding
@@ -21,19 +27,38 @@ import com.example.reddit.presentation.view.Adapter
 import com.example.reddit.presentation.view.PostAdapter
 import com.example.reddit.presentation.view.activities.MainActivity
 import com.example.reddit.presentation.view_models.HomeFragmentViewModel
+import com.example.reddit.presentation.view_models.SignInFragmentViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.android.ext.android.get
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
 class HomeFragment : Fragment() {
 
-    private val viewModel: HomeFragmentViewModel by viewModel()
+    private var viewModel: HomeFragmentViewModel ?= null
+    //private lateinit var viewModel: HomeFragmentViewModel
     private var listOfPosts: ArrayList<Post> = ArrayList()
     private var postAdapter: PostAdapter? = null
 
     private var _binding: FragmentHomeBinding?= null
     private val binding: FragmentHomeBinding get() = _binding!!
+
+//    override fun onAttach(context: Context) {
+//        super.onAttach(context)
+//        viewModel = get()
+//    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        //val repository = PostsRepository(api(APIService)) // Создаём репозиторий
+//        viewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
+//            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//                return HomeFragmentViewModel(repository) as T
+//            }
+//        })[HomeFragmentViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,6 +72,8 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+//        val vm: HomeFragmentViewModel = get()
+//         Log.d("KoinCheck", "ViewModel получен: $vm")
 
         // Делаем BottomNavigationView видимым
         (requireActivity() as MainActivity).binding.bottomNavigation.visibility = View.VISIBLE
@@ -97,7 +124,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun observeViewModel(userPrefs : UserPreferences) {
-        viewModel.liveData.observe(viewLifecycleOwner) { state ->
+        viewModel?.liveData?.observe(viewLifecycleOwner) { state ->
             state?.let {
                 if (it.checkSavedPostsBtn) {
                     findNavController().navigate(R.id.action_homeFragment_to_favoritesFragment)
@@ -139,7 +166,7 @@ class HomeFragment : Fragment() {
 //            view?.let { it1 -> showPopupMenu(it1) }
 //        }
         _binding?.fmSignOutBtn?.setOnClickListener {
-            viewModel.handleAction(HomeFragmentActions.ReturnToRegistration)
+            viewModel?.handleAction(HomeFragmentActions.ReturnToRegistration)
         }
     }
 

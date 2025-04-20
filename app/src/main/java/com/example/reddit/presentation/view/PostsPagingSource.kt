@@ -14,7 +14,7 @@ class PostsPagingSource (
         val limit = params.loadSize
 
         return try {
-            val response = api.getUsers(limit = limit, after = after) // Делаем запрос к API
+            val response = api.getPosts(limit = limit, after = after) // Делаем запрос к API
             val posts = response.data.children.map { it.post } // Преобразуем ответ в список постов
 
             LoadResult.Page(

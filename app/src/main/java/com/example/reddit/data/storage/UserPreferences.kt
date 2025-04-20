@@ -26,7 +26,6 @@ class UserPreferences(context: Context) {
         } else {
             null
         }
-
     }
 
     fun isUserExists() : Boolean{

@@ -33,32 +33,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.get
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
+//private var listOfPosts: ArrayList<Post> = ArrayList()
 
 class HomeFragment : Fragment() {
 
-    private var viewModel: HomeFragmentViewModel ?= null
-    //private lateinit var viewModel: HomeFragmentViewModel
-    private var listOfPosts: ArrayList<Post> = ArrayList()
+    private val viewModel: HomeFragmentViewModel by viewModel()
     private var postAdapter: PostAdapter? = null
 
     private var _binding: FragmentHomeBinding?= null
     private val binding: FragmentHomeBinding get() = _binding!!
 
-//    override fun onAttach(context: Context) {
-//        super.onAttach(context)
-//        viewModel = get()
-//    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //val repository = PostsRepository(api(APIService)) // Создаём репозиторий
-//        viewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
-//            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//                return HomeFragmentViewModel(repository) as T
-//            }
-//        })[HomeFragmentViewModel::class.java]
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,9 +59,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        val vm: HomeFragmentViewModel = get()
-//         Log.d("KoinCheck", "ViewModel получен: $vm")
-
         // Делаем BottomNavigationView видимым
         (requireActivity() as MainActivity).binding.bottomNavigation.visibility = View.VISIBLE
 
@@ -82,7 +66,6 @@ class HomeFragment : Fragment() {
         val userPrefs = UserPreferences(requireContext())
         val database = DatabaseProvider.getDatabase(requireContext())
         val dao = database.postDao()
-
 //        // setting of username
           val currentUser = userPrefs.getUser()
 //        if (currentUser!=null){
@@ -138,12 +121,12 @@ class HomeFragment : Fragment() {
                 if (it.readFullPostBtn){
                     //toNextScreen(ExactPostFragment(), "ExactPostFragment")
                 }
-                //updateListOfPosts(it.listOfPosts)
-                // Обновляем адаптер, если данные изменились
-                it.listOfPosts.observe(viewLifecycleOwner) { pagingData ->
-                    postAdapter?.submitData(lifecycle, pagingData)
-                }
             }
+        }
+
+        // ПОДПИСКА НА listOfPosts — отдельно, вне этой подписки
+        viewModel.liveData.value?.listOfPosts?.observe(viewLifecycleOwner) { pagingData ->
+            postAdapter?.submitData(lifecycle, pagingData)
         }
     }
 

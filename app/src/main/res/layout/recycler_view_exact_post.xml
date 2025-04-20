@@ -12,13 +12,14 @@
         android:id="@+id/rvep_author_actv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="20dp"
         android:layout_marginVertical="12dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
         android:paddingHorizontal="20dp"
-        android:textSize="12dp"
-        tools:text="Author"/>
+        android:textSize="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Author" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/rvep_header_actv"
@@ -27,19 +28,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rvep_author_actv"
         app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="14dp"
         android:text="Header"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/rvep_image_aciv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toBottomOf="@+id/rvep_header_actv"
+        app:layout_constraintStart_toStartOf="@+id/rvep_like_acb"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/rvep_message_actv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/rvep_share_acb"
-        app:layout_constraintTop_toBottomOf="@id/rvep_header_actv"
+        app:layout_constraintTop_toBottomOf="@id/rvep_image_aciv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="5dp"
         android:paddingHorizontal="20dp"
-        android:textSize="18dp"
+        android:textSize="12dp"
         tools:text="Message"/>
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -50,21 +59,24 @@
         app:layout_constraintBottom_toBottomOf="@id/rvep_author_actv"
         app:layout_constraintTop_toTopOf="@id/rvep_author_actv"
         android:layout_marginStart="20dp"
-        android:textSize="12dp"
+        android:textSize="10dp"
         tools:text="Date"/>
+
+
 
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/rvep_like_acb"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvep_message_actv"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:text="Like"
-        android:textSize="6dp"/>
+        android:textSize="6dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rvep_message_actv"
+        app:layout_constraintVertical_bias="1.0" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/rvep_dislike_acb"
@@ -72,7 +84,6 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@+id/rvep_like_acb"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvep_message_actv"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:text="Dislike"
@@ -84,7 +95,6 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@+id/rvep_dislike_acb"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvep_message_actv"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:text="Save"
@@ -96,7 +106,6 @@
        android:layout_width="40dp"
        android:layout_height="wrap_content"
        app:layout_constraintStart_toEndOf="@+id/rvep_save_acb"
-       app:layout_constraintTop_toBottomOf="@id/rvep_message_actv"
        app:layout_constraintBottom_toBottomOf="parent"
        android:layout_marginStart="20dp"
        android:layout_marginTop="10dp"

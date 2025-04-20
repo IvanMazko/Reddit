@@ -23,19 +23,20 @@ import com.example.reddit.presentation.view_models.SignInFragmentViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RegistrationFragment : Fragment() {
 
-    private var viewModel : RegistrationFragmentViewModel ?= null
+    private val viewModel : RegistrationFragmentViewModel by viewModel()
 
     private var _binding : FragmentRegistrationBinding ?= null
     private val binding : FragmentRegistrationBinding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application).create(
-            RegistrationFragmentViewModel::class.java)
-    }
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+////        viewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application).create(
+////            RegistrationFragmentViewModel::class.java)
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,7 +53,6 @@ class RegistrationFragment : Fragment() {
         val userPrefs = UserPreferences(requireContext())
         val database = DatabaseProvider.getDatabase(requireContext())
         val dao = database.userDao()
-
         initClickListeners(userPrefs, dao)
 
         observeViewModel()

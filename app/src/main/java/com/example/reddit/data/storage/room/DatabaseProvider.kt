@@ -14,7 +14,7 @@ object DatabaseProvider {
                 .fallbackToDestructiveMigration() // Удаляет старую БД при изменении схемы
                 .build()
             INSTANCE = instance
-            instance //return instance
+            instance //return instanceьб
         }
     }
 

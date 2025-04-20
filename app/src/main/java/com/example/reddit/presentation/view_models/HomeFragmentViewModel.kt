@@ -29,7 +29,6 @@ class HomeFragmentViewModel(private val repository: PostsRepository) : ViewModel
 
     fun handleAction(actions: HomeFragmentActions) {
         when(actions) {
-            //is HomeFragmentActions.SetListOfPosts ->  _liveData.value = _liveData.value?.copy(listOfPosts = actions.list)
             HomeFragmentActions.ReadFullPost -> _liveData.value = _liveData.value?.copy(readFullPostBtn = true)
             HomeFragmentActions.SavePost -> _liveData.value = _liveData.value?.copy(savePostBtn = true)
             HomeFragmentActions.CheckSavedPosts -> _liveData.value = _liveData.value?.copy(checkSavedPostsBtn = true)
@@ -37,3 +36,6 @@ class HomeFragmentViewModel(private val repository: PostsRepository) : ViewModel
         }
     }
 }
+
+
+//is HomeFragmentActions.SetListOfPosts ->  _liveData.value = _liveData.value?.copy(listOfPosts = actions.list)

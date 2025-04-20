@@ -6,9 +6,10 @@ import retrofit2.http.Query
 
 interface APIService {
 
-    @GET("r/all/top")
-    suspend fun getUsers(
+    @GET("r/all/top.json")
+    suspend fun getPosts(
         @Query("limit") limit : Int = 10,
-        @Query("after") after : String? = null
+        @Query("after") after : String? = null,
+        @Query("t") time: String = "hour"
     ) : RedditResponse
 }

@@ -23,17 +23,18 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SignInFragment : Fragment() {
 
-    private var viewModel: SignInFragmentViewModel ?= null
+    private val viewModel: SignInFragmentViewModel by viewModel()
 
     private var _binding : FragmentSignInBinding ?= null
     private val binding : FragmentSignInBinding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application).create(SignInFragmentViewModel::class.java)
+        //viewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application).create(SignInFragmentViewModel::class.java)
     }
 
     override fun onCreateView(
